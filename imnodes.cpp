@@ -1367,10 +1367,10 @@ QuadOffsets CalculateQuadOffsets(const float side_length)
 
     QuadOffsets offset;
 
-    offset.TopLeft = ImVec2(-half_side, half_side);
-    offset.BottomLeft = ImVec2(-half_side, -half_side);
-    offset.BottomRight = ImVec2(half_side, -half_side);
-    offset.TopRight = ImVec2(half_side, half_side);
+    offset.TopLeft = ImVec2(-half_side, -half_side);
+    offset.BottomLeft = ImVec2(-half_side, half_side);
+    offset.BottomRight = ImVec2(half_side, half_side);
+    offset.TopRight = ImVec2(half_side, -half_side);
 
     return offset;
 }
@@ -1397,8 +1397,8 @@ TriangleOffsets CalculateTriangleOffsets(const float side_length)
     const float vertical_offset = 0.5f * side_length;
 
     TriangleOffsets offset;
-    offset.TopLeft = ImVec2(left_offset, vertical_offset);
-    offset.BottomLeft = ImVec2(left_offset, -vertical_offset);
+    offset.TopLeft = ImVec2(left_offset, -vertical_offset);
+    offset.BottomLeft = ImVec2(left_offset, vertical_offset);
     offset.Right = ImVec2(right_offset, 0.f);
 
     return offset;
@@ -1431,9 +1431,9 @@ void DrawPinShape(const ImVec2& pin_pos, const ImPinData& pin, const ImU32 pin_c
         const QuadOffsets offset = CalculateQuadOffsets(GImNodes->Style.PinQuadSideLength);
         GImNodes->CanvasDrawList->AddQuad(
             pin_pos + offset.TopLeft,
-            pin_pos + offset.BottomLeft,
-            pin_pos + offset.BottomRight,
             pin_pos + offset.TopRight,
+            pin_pos + offset.BottomRight,
+            pin_pos + offset.BottomLeft,
             pin_color,
             GImNodes->Style.PinLineThickness);
     }
@@ -1443,9 +1443,9 @@ void DrawPinShape(const ImVec2& pin_pos, const ImPinData& pin, const ImU32 pin_c
         const QuadOffsets offset = CalculateQuadOffsets(GImNodes->Style.PinQuadSideLength);
         GImNodes->CanvasDrawList->AddQuadFilled(
             pin_pos + offset.TopLeft,
-            pin_pos + offset.BottomLeft,
-            pin_pos + offset.BottomRight,
             pin_pos + offset.TopRight,
+            pin_pos + offset.BottomRight,
+            pin_pos + offset.BottomLeft,
             pin_color);
     }
     break;
@@ -1455,8 +1455,8 @@ void DrawPinShape(const ImVec2& pin_pos, const ImPinData& pin, const ImU32 pin_c
             CalculateTriangleOffsets(GImNodes->Style.PinTriangleSideLength);
         GImNodes->CanvasDrawList->AddTriangle(
             pin_pos + offset.TopLeft,
-            pin_pos + offset.BottomLeft,
             pin_pos + offset.Right,
+            pin_pos + offset.BottomLeft,
             pin_color,
             // NOTE: for some weird reason, the line drawn by AddTriangle is
             // much thinner than the lines drawn by AddCircle or AddQuad.
@@ -1471,8 +1471,8 @@ void DrawPinShape(const ImVec2& pin_pos, const ImPinData& pin, const ImU32 pin_c
             CalculateTriangleOffsets(GImNodes->Style.PinTriangleSideLength);
         GImNodes->CanvasDrawList->AddTriangleFilled(
             pin_pos + offset.TopLeft,
-            pin_pos + offset.BottomLeft,
             pin_pos + offset.Right,
+            pin_pos + offset.BottomLeft,
             pin_color);
     }
     break;
