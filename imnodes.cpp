@@ -1484,8 +1484,9 @@ void DrawPinShape(const ImVec2& pin_pos, const ImPinData& pin, const ImU32 pin_c
 
 void DrawPin(ImNodesEditorContext& editor, const int pin_idx)
 {
-    ImPinData&    pin = editor.Pins.Pool[pin_idx];
-    const ImRect& parent_node_rect = editor.Nodes.Pool[pin.ParentNodeIdx].Rect;
+    ImPinData&        pin = editor.Pins.Pool[pin_idx];
+    const ImNodeData& node = editor.Nodes.Pool[pin.ParentNodeIdx];
+    const ImRect&     parent_node_rect = node.Rect;
 
     pin.Pos = GetScreenSpacePinCoordinates(parent_node_rect, pin.AttributeRect, pin.Type);
 
@@ -1496,7 +1497,16 @@ void DrawPin(ImNodesEditorContext& editor, const int pin_idx)
         pin_color = pin.ColorStyle.Hovered;
     }
 
-    DrawPinShape(pin.Pos, pin, pin_color);
+    if (GImNodes->Style.CustomCallbacks.ShapeRenderer != nullptr)
+    {
+        const QuadOffsets offset = CalculateQuadOffsets(GImNodes->Style.PinQuadSideLength);
+        const ImRect rect(pin.Pos + offset.TopLeft, pin.Pos + offset.BottomRight);
+        GImNodes->Style.CustomCallbacks.ShapeRenderer(pin.Id, node.Id, rect, pin_color, GImNodes->Style.CustomCallbacks.UserData);
+    }
+    else
+    {
+        DrawPinShape(pin.Pos, pin, pin_color);
+    }
 }
 
 void DrawNode(ImNodesEditorContext& editor, const int node_idx)

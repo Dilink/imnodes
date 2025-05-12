@@ -11,6 +11,7 @@
 #define IMNODES_NAMESPACE ImNodes
 #endif
 
+struct ImRect;
 typedef int ImNodesCol;             // -> enum ImNodesCol_
 typedef int ImNodesStyleVar;        // -> enum ImNodesStyleVar_
 typedef int ImNodesStyleFlags;      // -> enum ImNodesStyleFlags_
@@ -204,6 +205,13 @@ struct ImNodesStyle
     // Set these mid-frame using Push/PopColorStyle. You can index this color array with with a
     // ImNodesCol value.
     unsigned int Colors[ImNodesCol_COUNT];
+
+    struct CustomCallbacks {
+        using TCustomShapeRendererFunc = void(*)(int pinId, int parentNodeId, const ImRect& attributeRect, ImU32 pinColor, void* userData);
+        TCustomShapeRendererFunc ShapeRenderer = nullptr;
+
+        void* UserData = nullptr;
+    } CustomCallbacks;
 
     ImNodesStyle();
 };
