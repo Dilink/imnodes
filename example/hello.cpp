@@ -11,7 +11,38 @@ class HelloWorldNodeEditor
 public:
     void show()
     {
-        ImGui::Begin("simple node editor");
+        ImGui::Begin("simple node editor", nullptr, ImGuiWindowFlags_MenuBar);
+
+        if (ImGui::BeginMenuBar())
+        {
+            if (ImGui::BeginMenu("View"))
+            {
+                if (ImGui::MenuItem("Reset Panning"))
+                    ImNodes::EditorContextResetPanning(ImVec2());
+
+                if (ImGui::MenuItem("Reset Zoom"))
+                    ImNodes::EditorContextSetZoom(1.0f);
+
+                ImGui::EndMenu();
+            }
+
+            if (ImGui::BeginMenu("Debug"))
+            {
+                ImGui::MenuItem("Show Debug Info", NULL, &m_show_debug_info);
+                ImGui::EndMenu();
+            }
+
+            ImGui::EndMenuBar();
+        }
+
+        if (m_show_debug_info)
+        {
+            if (ImGui::Begin("Debug Info", &m_show_debug_info))
+            {
+                ImNodes::EditorContextDrawDebugInfo();
+            }
+            ImGui::End();
+        }
 
         ImNodes::BeginNodeEditor();
         ImNodes::BeginNode(1);
@@ -34,6 +65,8 @@ public:
 
         ImGui::End();
     }
+private:
+    bool m_show_debug_info = false;
 };
 
 static HelloWorldNodeEditor editor;

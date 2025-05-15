@@ -79,7 +79,8 @@ enum ImNodesStyleFlags_
     ImNodesStyleFlags_NodeOutline = 1 << 0,
     ImNodesStyleFlags_GridLines = 1 << 2,
     ImNodesStyleFlags_GridLinesPrimary = 1 << 3,
-    ImNodesStyleFlags_GridSnapping = 1 << 4
+    ImNodesStyleFlags_GridSnapping = 1 << 4,
+    ImNodesStyleFlags_Zoom = 1 << 5
 };
 
 enum ImNodesPinShape_
@@ -200,6 +201,8 @@ struct ImNodesStyle
     // Mini-map offset from the screen side.
     ImVec2 MiniMapOffset;
 
+    float ZoomSpeed;
+
     // By default, ImNodesStyleFlags_NodeOutline and ImNodesStyleFlags_Gridlines are enabled.
     ImNodesStyleFlags Flags;
     // Set these mid-frame using Push/PopColorStyle. You can index this color array with with a
@@ -262,6 +265,9 @@ void                  EditorContextSet(ImNodesEditorContext*);
 ImVec2                EditorContextGetPanning();
 void                  EditorContextResetPanning(const ImVec2& pos);
 void                  EditorContextMoveToNode(const int node_id);
+float                 EditorContextGetZoom();
+void                  EditorContextSetZoom(float zoom, const ImVec2& zoom_centering_pos = ImVec2());
+void                  EditorContextDrawDebugInfo();
 
 ImNodesIO& GetIO();
 
